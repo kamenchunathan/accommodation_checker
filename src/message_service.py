@@ -15,7 +15,7 @@ class TwilioLiveSMSBackend:
         account_sid = os.environ['TWILIO_ACCOUNT_SID']
         auth_token = os.environ['TWILIO_AUTH_TOKEN']
         self.client = Client(account_sid, auth_token)
-        self.sender_phone_number = from_phone_number = os.environ['FROM_PHONE_NUMBER']
+        self.sender_phone_number = os.environ['FROM_PHONE_NUMBER']
 
     @log_message
     def send_message(self, recipient_phone_no, message_body):
