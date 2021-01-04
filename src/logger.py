@@ -48,21 +48,7 @@ def _log_message(message):
         logger.info(logger.error(' '.join([f'{key}: {value}' for key, value in log.items()])))
 
 
-def _schedule_message_for_logging(message):
-    # TODO: schedule message for logging with the custom event loop
-    _log_message(message)
-
-
-def log_message(func):
-    """
-    a decorator that logs the message returned by the decorated function
-    :param func: decorator target function
-    :return: None
-    """
-
-    def wrapper(*args, **kwargs):
-        message = func(*args, **kwargs)
-        _schedule_message_for_logging(message)
-        return message
-
-    return wrapper
+def log_updated_message(message):
+    """Refreshes the message instance and logs it"""
+    updated_message = message.fetch()
+    _log_message(updated_message)
