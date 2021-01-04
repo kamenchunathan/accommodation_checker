@@ -33,7 +33,7 @@ def _log_message(message):
         log = {
             'sid': message.sid,
             'status': message.status,
-            'date_created': message.date_create,
+            'date_created': message.date_created,
             'date_sent': message.date_sent
         }
         logger.error(' '.join([f'{key}: {value}' for key, value in log.items()]))
@@ -41,7 +41,7 @@ def _log_message(message):
         log = {
             'sid': message.sid,
             'status': message.status,
-            'date_created': message.date_create,
+            'date_created': message.date_created,
             'error_code': message.error_code,
             'error_message': message.error_message
         }
