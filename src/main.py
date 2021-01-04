@@ -100,13 +100,13 @@ def check_room_booking_open():
         raise Exception('Login Failed')
 
     # go the room booking page and check for a form on that page
-    browser.follow_link('http://smis.uonbi.ac.ke/hamis/bookroom.php')
+    browser.follow_link('https://smis.uonbi.ac.ke/hamis/bookroom.php')
     browser.open_relative('?session=in&amp;AcademicYear=2020/2021')
     try:
         browser.select_form()
     except LinkNotFoundError:
         pass
-    else:
+    # else:
         sms_sender = Messenger()
         sms_sender.send_message('+254705493474', 'Hello World')
 
