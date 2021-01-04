@@ -161,7 +161,7 @@ def check_room_booking_open():
 
 def exception_handler(e):
     """Logs all exceptions to an error log"""
-    with open('accommodation_checker.error.log', 'a') as f:
+    with open('logs/accommodation_checker.error.log', 'a') as f:
         f.write('[{}] [ main ] ERROR: \n'.format(datetime.datetime.now().strftime('%Y/%m/%d %H:%M:%S')))
         traceback.print_exc(file=f)
         f.write('\n\n')

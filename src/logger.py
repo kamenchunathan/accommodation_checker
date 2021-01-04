@@ -1,7 +1,7 @@
 import logging.handlers
 import os
 
-handler = logging.handlers.WatchedFileHandler(os.environ.get('LOG_FILE', 'accommodation_checker.message.log'))
+handler = logging.handlers.WatchedFileHandler(os.environ.get('LOG_FILE', 'logs/accommodation_checker.message.log'))
 formatter = logging.Formatter(
     '%(asctime)s [%(name)-20s][%(levelname)-18s] %(message_body)s (%(filename)s:%(lineno)d)'
 )
