@@ -7,4 +7,4 @@ RUN pip install -r requirements.txt
 
 COPY src ./src
 
-ENTRYPOINT ["python3", "src/main.py"]
+ENTRYPOINT ["python3", "src/message_backend.py"]

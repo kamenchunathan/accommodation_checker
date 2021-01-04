@@ -15,4 +15,6 @@ message = client.messages.create(
     to='+254705493474'
 )
 
-print(message.sid)
+
+messages = TwilioLiveSMSBackend().send_message('wow')
+print(messages)
