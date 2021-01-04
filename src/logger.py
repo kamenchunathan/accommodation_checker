@@ -3,7 +3,7 @@ import os
 
 handler = logging.handlers.WatchedFileHandler(os.environ.get('LOG_FILE', 'logs/accommodation_checker.message.log'))
 formatter = logging.Formatter(
-    '%(asctime)s [%(name)-20s][%(levelname)-18s] %(message_body)s (%(filename)s:%(lineno)d)'
+    '%(asctime)s [%(name)-20s][%(levelname)-18s] %(message)s (%(filename)s:%(lineno)d)'
 )
 handler.setFormatter(formatter)
 logger = logging.getLogger('Accommodation Checker')
