@@ -45,4 +45,4 @@ class Messenger:
         self.message_backend = backend if backend else ConsoleBackend()
 
     def send_message(self, *args, **kwargs):
-        self.message_backend.send_message(*args, **kwargs)
+        return self.message_backend.send_message(*args, **kwargs)
