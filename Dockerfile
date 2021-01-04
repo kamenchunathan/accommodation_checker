@@ -6,5 +6,6 @@ COPY requirements.txt ./
 RUN pip install -r requirements.txt
 
 COPY src ./src
+RUN mkdir ./src/logs
 
 ENTRYPOINT ["python3", "src/main.py"]
