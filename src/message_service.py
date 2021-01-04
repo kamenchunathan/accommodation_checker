@@ -2,8 +2,6 @@ import os
 
 from twilio.rest import Client
 
-from logger import log_message
-
 
 class TwilioLiveSMSBackend:
     """
@@ -17,7 +15,6 @@ class TwilioLiveSMSBackend:
         self.client = Client(account_sid, auth_token)
         self.sender_phone_number = os.environ['FROM_PHONE_NUMBER']
 
-    @log_message
     def send_message(self, recipient_phone_no, message_body):
         message = self.client.messages.create(
             body=message_body,
