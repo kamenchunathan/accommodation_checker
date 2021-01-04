@@ -36,7 +36,7 @@ def _log_message(message):
             'date_created': message.date_created,
             'date_sent': message.date_sent
         }
-        logger.error(' '.join([f'{key}: {value}' for key, value in log.items()]))
+        logger.error('\t'.join([f'{key}: {value}' for key, value in log.items()]))
     else:
         log = {
             'sid': message.sid,
@@ -45,7 +45,7 @@ def _log_message(message):
             'error_code': message.error_code,
             'error_message': message.error_message
         }
-        logger.info(logger.error(' '.join([f'{key}: {value}' for key, value in log.items()])))
+        logger.info('\t'.join([f'{key}: {value}' for key, value in log.items()]))
 
 
 def log_updated_message(message):
