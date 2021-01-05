@@ -24,7 +24,7 @@ def handle_exceptions(exception_handler_func):
 
 
 class EventLoop:
-    delta_time = 20
+    delta_time = 10 * 60  # Check every ten minutes
 
     __scheduled_functions = []
     __exception_handler = None
