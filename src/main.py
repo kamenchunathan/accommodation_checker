@@ -154,10 +154,12 @@ def set_up():
 
 def check_room_booking_open():
     """Main func that is run to check whether the room booking application link has been opened"""
+    time_delay_before_click = 5
     browser = mechanicalsoup.StatefulBrowser()
 
     # log in to student portal
     browser.open('https://smis.uonbi.ac.ke')
+    time.sleep(time_delay_before_click)
 
     browser.select_form()  # There is only one form on the page, the login form
     browser['regNo'] = os.environ['REG_NO']
@@ -168,6 +170,7 @@ def check_room_booking_open():
 
     # go the room booking page and check for a form on that page
     browser.follow_link('https://smis.uonbi.ac.ke/hamis/bookroom.php')
+    time.sleep(time_delay_before_click)
     browser.open_relative('?session=in&amp;AcademicYear=2020/2021')
     try:
         browser.select_form()
