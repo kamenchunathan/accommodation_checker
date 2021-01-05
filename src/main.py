@@ -10,6 +10,19 @@ from message_service import Messenger, TwilioLiveSMSBackend
 from logger import log_updated_message
 
 
+def handle_exceptions(exception_handler_func):
+    def decorator(wrapped):
+        def wrapper(*args, **kwargs):
+            try:
+                return wrapped(*args, **kwargs)
+            except Exception as e:
+                exception_handler_func(e)
+
+        return wrapper
+
+    return decorator
+
+
 class EventLoop:
     delta_time = 20
 
@@ -33,7 +46,7 @@ class EventLoop:
         """
         Schedules a func for execution in the next iteration of the loop if 
         the time elapsed exceeds the delay set
-        
+
         :param func: func to call
         :param delay: time in seconds that should pass before the func is called again
         :param *args, **kwargs All other arguments are passed to the function to be called
@@ -78,6 +91,23 @@ class EventLoop:
         cls.__exception_handler = func
 
     @classmethod
+    def _call_single_scheduled_functions(cls):
+        for func_details in cls.__single_iter_scheduled_functions:
+            elapsed_time = datetime.timedelta(seconds=func_details['delay'])
+            if func_details['time_scheduled'] + elapsed_time < datetime.datetime.now():
+                try:
+                    args = func_details['args'] if func_details['args'] else ()
+                    kwargs = func_details['kwargs'] if func_details['kwargs'] else {}
+                    func_details['func'](*args, **kwargs)
+                except Exception as exc:
+                    if cls.__exception_handler:
+                        cls.__exception_handler(exc)
+                    elif not os.environ.get('DEBUG'):
+                        raise
+                finally:
+                    cls.__single_iter_scheduled_functions.remove(func_details)
+
+    @classmethod
     def run(cls):
         """
         The main loop
@@ -94,30 +124,22 @@ class EventLoop:
         """
         cls.run_set_up_functions()
         while True:
-            try:
-                # call all functions that have been scheduled once if appropriate
-                for func_details in cls.__single_iter_scheduled_functions:
-                    elapsed_time = datetime.timedelta(seconds=func_details['delay'])
-                    if func_details['time_scheduled'] + elapsed_time < datetime.datetime.now():
-                        try:
-                            args = func_details['args'] if func_details['args'] else ()
-                            kwargs = func_details['kwargs'] if func_details['kwargs'] else {}
-                            func_details['func'](*args, **kwargs)
-                        finally:
-                            cls.__single_iter_scheduled_functions.remove(func_details)
+            # call all functions that have been scheduled once if appropriate
+            cls._call_single_scheduled_functions()
 
-                # call all functions that have been scheduled to repeat
-                for func in cls.__scheduled_functions:
+            # call all functions that have been scheduled to repeat
+            for func in cls.__scheduled_functions:
+                try:
                     func()
+                except Exception as e:
+                    if cls.__exception_handler:
+                        cls.__exception_handler(e)
+                    elif not os.environ.get('DEBUG'):
+                        raise
+            time.sleep(cls.delta_time)
+            if cls.should_break():
+                break
 
-                time.sleep(cls.delta_time)
-                if cls.should_break():
-                    break
-            except Exception as e:
-                if cls.__exception_handler:
-                    cls.__exception_handler(e)
-                elif not os.environ.get('DEBUG'):
-                    raise
 
 
 def set_up():
@@ -162,7 +184,8 @@ def check_room_booking_open():
 def exception_handler(e):
     """Logs all exceptions to an error log"""
     with open('logs/accommodation_checker.error.log', 'a') as f:
-        f.write('[{}] [ main ] ERROR: \n'.format(datetime.datetime.now().strftime('%Y/%m/%d %H:%M:%S')))
+        f.write('[{}] [ main ] ERROR: \n'.format(
+            datetime.datetime.now().strftime('%Y/%m/%d %H:%M:%S')))
         traceback.print_exc(file=f)
         f.write('\n\n')
 
