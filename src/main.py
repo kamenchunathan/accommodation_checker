@@ -5,9 +5,9 @@ import traceback
 
 import mechanicalsoup
 import requests
+from logger import log_updated_message
 from mechanicalsoup import LinkNotFoundError
 from message_service import Messenger, TwilioLiveSMSBackend
-from logger import log_updated_message
 
 
 def handle_exceptions(exception_handler_func):
@@ -139,7 +139,6 @@ class EventLoop:
             time.sleep(cls.delta_time)
             if cls.should_break():
                 break
-
 
 
 def set_up():
